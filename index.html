@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot PPDB SMK (Versi GitHub.io)</title>
+    <style>
+        /* --- CSS SAMA SEPERTI SEBELUMNYA --- */
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .chat-container { width: 400px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; height: 80vh; max-height: 600px;}
+        .chat-header { background-color: #24292e; color: white; padding: 15px; text-align: center; font-weight: bold; } /* Warna ala GitHub */
+        .chat-box { flex: 1; overflow-y: auto; padding: 15px; background: #e9ecef; display: flex; flex-direction: column; }
+        .input-area { display: flex; border-top: 1px solid #ddd; }
+        input { flex: 1; padding: 15px; border: none; outline: none; }
+        button { padding: 15px 20px; border: none; background: #28a745; color: white; cursor: pointer; }
+        button:hover { background: #218838; }
+        .message { padding: 10px; border-radius: 5px; margin-bottom: 10px; max-width: 70%; word-wrap: break-word; }
+        .user-message { background: #007bff; color: white; align-self: flex-end; }
+        .bot-message { background: #fff; color: #333; align-self: flex-start; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">🤖 Info PPDB (Versi GitHub Pages)</div>
+        <div class="chat-box" id="chatBox">
+            <div class="message bot-message">Halo! Ini versi github.io. Tanya tentang syarat, jadwal, atau jurusan ya!</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Ketik pesan..." autocomplete="off">
+            <button onclick="sendMessage()">Kirim</button>
+        </div>
+    </div>
+
+    <script>
+        // --- OTAK CHATBOT DIPINDAH KE SINI (JAVASCRIPT) ---
+        
+        const knowledgeBase = {
+            "halo": "Halo! Selamat datang di Layanan Informasi PPDB SMK via GitHub Pages.",
+            "syarat": "Syarat: Lulus SMP, Nilai Rapor min 75, Sehat jasmani rohani.",
+            "jadwal": "Pendaftaran: 1 - 30 Juni 2024.",
+            "biaya": "Pendaftaran GRATIS. Daftar ulang Rp 1.500.000.",
+            "jurusan": "Jurusan kami: RPL, TKJ, dan Tata Boga.",
+            "lokasi": "Jl. Pendidikan No. 123, Kota Belajar.",
+            "kontak": "WA Panitia: 0812-3456-7890."
+        };
+
+        function getBotResponse(input) {
+            // Ubah ke huruf kecil semua
+            input = input.toLowerCase();
+
+            // Logika pencarian sederhana (mirip Python 'if in')
+            for (let key in knowledgeBase) {
+                if (input.includes(key)) {
+                    return knowledgeBase[key];
+                }
+            }
+            return "Maaf, saya tidak mengerti. Coba tanya 'syarat', 'jadwal', atau 'jurusan'.";
+        }
+
+        function sendMessage() {
+            var inputField = document.getElementById("userInput");
+            var message = inputField.value;
+            if (message.trim() === "") return;
+
+            // Tampilkan pesan user
+            var chatBox = document.getElementById("chatBox");
+            var userBubble = `<div class="message user-message">${message}</div>`;
+            chatBox.innerHTML += userBubble;
+            inputField.value = "";
+
+            // --- PROSES JAWABAN (LANGSUNG DI BROWSER) ---
+            // Kita beri jeda 0.5 detik biar terlihat seperti 'mikir'
+            setTimeout(() => {
+                var response = getBotResponse(message);
+                var botBubble = `<div class="message bot-message">${response}</div>`;
+                chatBox.innerHTML += botBubble;
+                chatBox.scrollTop = chatBox.scrollHeight; 
+            }, 500);
+        }
+
+        document.getElementById("userInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") sendMessage();
+        });
+    </script>
+
+</body>
+</html>
